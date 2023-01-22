@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.foxminded.javaspring.schoolspringjdbc.dao.JPAStudentDao;
+import com.foxminded.javaspring.schoolspringjdbc.dao.StudentDao;
 import com.foxminded.javaspring.schoolspringjdbc.model.Course;
 import com.foxminded.javaspring.schoolspringjdbc.model.Student;
 import com.foxminded.javaspring.schoolspringjdbc.utils.ScannerUtil;
@@ -20,23 +20,22 @@ import lombok.extern.slf4j.Slf4j;
 public class StudentService {
 
 	private ScannerUtil scannerUtil;
-	private JPAStudentDao jpaStudentDao;
+	private StudentDao studentDao;
 
 	@Autowired
-	public StudentService(ScannerUtil scannerUtil, JPAStudentDao jpaStudentDao) {
+	public StudentService(ScannerUtil scannerUtil) {
 		this.scannerUtil = scannerUtil;
-		this.jpaStudentDao = jpaStudentDao;
 	}
 
 	public void addStudentsToDB() {
-		DBGeneratorService.students.forEach(student -> jpaStudentDao.saveStudent(student));
+		DBGeneratorService.students.forEach(student -> studentDao.save(student));
 		log.info("Students added to School database");
 	}
 
 	public void updateAllStudentsInDB() {
 		for (Student student : DBGeneratorService.students) {
 			if (student.getGroupID() != 0) {
-				jpaStudentDao.updateStudent(student);
+				studentDao.save(student);
 			}
 		}
 		log.info("Students updated");
@@ -49,7 +48,7 @@ public class StudentService {
 			System.out.println(course.getCourseName());
 		}
 		String courseName = scannerUtil.scanString();
-		List<Student> studentsOfCourse = jpaStudentDao.findStudentsRelatedToCourse(courseName);
+		List<Student> studentsOfCourse = studentDao.findStudentsRelatedToCourse(courseName);
 		for (Student student : studentsOfCourse) {
 			System.out.println(student.getFirstName() + " " + student.getLastName());
 		}
@@ -63,7 +62,7 @@ public class StudentService {
 		String firstName = scannerUtil.scanString();
 		System.out.println("Enter the student last name");
 		String lastName = scannerUtil.scanString();
-		jpaStudentDao.saveStudent(new Student(firstName, lastName));
+		studentDao.save(new Student(firstName, lastName));
 		System.out.println("New student " + firstName + " " + lastName + " is added to School database");
 		System.out.println();
 	}
@@ -72,7 +71,7 @@ public class StudentService {
 		System.out.println("Delete a student by the STUDENT_ID");
 		System.out.println("Enter the student ID");
 		int studentIdToDelete = scannerUtil.scanInt();
-		jpaStudentDao.deleteStudentFromDB(studentIdToDelete);
+		studentDao.deleteById(studentIdToDelete);
 		System.out.println("Student with ID " + studentIdToDelete + " is deleted from School database");
 		System.out.println();
 	}
@@ -96,7 +95,7 @@ public class StudentService {
 			}
 		}
 		student.getCourses().add(DBGeneratorService.courses.get(courseId - 1));
-		jpaStudentDao.updateStudent(student);
+		studentDao.save(student);
 		System.out.println(
 				"Course with ID " + courseId + " is assigned to student with ID " + studentId + " in School database");
 	}
@@ -118,7 +117,7 @@ public class StudentService {
 			if (studentCourse.getCourseID() == courseIdToRemove) {
 				student.getCourses()
 						.remove(DBGeneratorService.courses.get(courseIdToRemove - 1));
-				jpaStudentDao.updateStudent(student);
+				studentDao.save(student);
 				System.out.println("Student with ID " + studentIdToRemove + " is removed from the course "
 						+ courseIdToRemove + " in School database");
 				return;

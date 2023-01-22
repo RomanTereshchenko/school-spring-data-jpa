@@ -12,20 +12,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.foxminded.javaspring.schoolspringjdbc.dao.JPAGroupDao;
+import com.foxminded.javaspring.schoolspringjdbc.dao.GroupDao;
 import com.foxminded.javaspring.schoolspringjdbc.model.Group;
 import com.foxminded.javaspring.schoolspringjdbc.model.Student;
 
 @SpringBootTest
-class JpaGroupDaoTest {
+class GroupDaoTest {
 
-	private JPAGroupDao jpaGroupDao;
+	private GroupDao groupDao;
 	@PersistenceContext
 	private final EntityManager em;
 
 	@Autowired
-	public JpaGroupDaoTest(JPAGroupDao jpaGroupDao, EntityManager em) {
-		this.jpaGroupDao = jpaGroupDao;
+	public GroupDaoTest(GroupDao groupDao, EntityManager em) {
+		this.groupDao = groupDao;
 		this.em = em;
 	}
 
@@ -52,7 +52,7 @@ class JpaGroupDaoTest {
 	@Test
 	@Transactional
 	void testSaveGroup() {
-		jpaGroupDao.saveGroup(new Group("tt-00"));
+		groupDao.save(new Group("tt-00"));
 		Group group = (Group) em.createNativeQuery(
 				"SELECT * FROM school.groups g WHERE group_name = ?",
 				Group.class).setParameter(1, "tt-00").getSingleResult();
@@ -74,7 +74,7 @@ class JpaGroupDaoTest {
 		student2.setFirstName("TestFName2");
 		student2.setLastName("TestLName2");
 		em.persist(student2);
-		assertEquals("tt-00", jpaGroupDao.selectGroupsByStudentsCount(2).get(0).getGroupName());
+		assertEquals("tt-00", groupDao.findByStudentsCount(2).get(0).getGroupName());
 	}
 
 }

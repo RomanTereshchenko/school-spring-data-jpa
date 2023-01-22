@@ -9,7 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.foxminded.javaspring.schoolspringjdbc.dao.JPATablesDao;
+import com.foxminded.javaspring.schoolspringjdbc.dao.TablesDao;
 import com.foxminded.javaspring.schoolspringjdbc.service.CourseGeneratorService;
 import com.foxminded.javaspring.schoolspringjdbc.service.CourseService;
 import com.foxminded.javaspring.schoolspringjdbc.service.DBGeneratorService;
@@ -22,7 +22,7 @@ import com.foxminded.javaspring.schoolspringjdbc.service.StudentService;
 class DBGeneratorServiceTest {
 	
 	@Mock
-	private JPATablesDao jpaTablesDao;
+	private TablesDao jpaTablesDao;
 	@Mock
 	private GroupGeneratorService groupGeneratorService;
 	@Mock

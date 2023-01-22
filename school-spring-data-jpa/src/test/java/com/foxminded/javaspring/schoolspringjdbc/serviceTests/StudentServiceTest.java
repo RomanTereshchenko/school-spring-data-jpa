@@ -18,9 +18,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.foxminded.javaspring.schoolspringjdbc.dao.JPAStudentDao;
+import com.foxminded.javaspring.schoolspringjdbc.dao.StudentDao;
 import com.foxminded.javaspring.schoolspringjdbc.model.Course;
 import com.foxminded.javaspring.schoolspringjdbc.model.Student;
 import com.foxminded.javaspring.schoolspringjdbc.service.DBGeneratorService;
@@ -28,6 +29,8 @@ import com.foxminded.javaspring.schoolspringjdbc.service.StudentService;
 import com.foxminded.javaspring.schoolspringjdbc.utils.ScannerUtil;
 
 @ExtendWith(MockitoExtension.class)
+@Transactional
+@SpringBootTest
 class StudentServiceTest {
 	
 	@Mock
@@ -38,7 +41,7 @@ class StudentServiceTest {
 	private ScannerUtil scannerUtil;
 
 	@Mock
-	private JPAStudentDao jpaStudentDao;
+	private StudentDao studentDao;
 
 	@InjectMocks
 	private StudentService studentService;
@@ -48,7 +51,7 @@ class StudentServiceTest {
 		List<Student> studentsOfCourse = new ArrayList<>();
 		studentsOfCourse.add(new Student("TestFirstName", "TestLastName"));
 		Mockito.when(scannerUtil.scanString()).thenReturn("TestCourse");
-		Mockito.when(jpaStudentDao.findStudentsRelatedToCourse("TestCourse")).thenReturn(studentsOfCourse);
+		Mockito.when(studentDao.findStudentsRelatedToCourse("TestCourse")).thenReturn(studentsOfCourse);
 		List<Student> result = studentService.findStudentsRelatedToCourse();
 		assertEquals("TestFirstName", result.get(0).getFirstName());
 		assertEquals("TestLastName", result.get(0).getLastName());
@@ -58,14 +61,14 @@ class StudentServiceTest {
 	void testAddNewStudent() {
 		Mockito.when(scannerUtil.scanString()).thenReturn("TestName");
 		studentService.addNewStudent();
-		verify(jpaStudentDao).saveStudent(any(Student.class));
+		verify(studentDao).save(any(Student.class));
 	}
 
 	@Test
 	void testDeleteStudent() {
 		Mockito.when(scannerUtil.scanInt()).thenReturn(1);
 		studentService.deleteStudent();
-		verify(jpaStudentDao).deleteStudentFromDB(anyInt());
+		verify(studentDao).deleteById(anyInt());
 	}
 	
 	@Test
@@ -76,7 +79,7 @@ class StudentServiceTest {
 		DBGeneratorService.courses.add(new Course(courseAndStudentId, "TestCourse"));
 		studentService.addStudentToCourse();
 		verify(scannerUtil, times(2)).scanInt();
-		verify(jpaStudentDao).updateStudent(DBGeneratorService.students.get(0));
+		verify(studentDao).save(DBGeneratorService.students.get(0));
 		DBGeneratorService.students.clear();
 		DBGeneratorService.courses.clear();
 	}
@@ -93,7 +96,7 @@ class StudentServiceTest {
 		Mockito.when(scannerUtil.scanInt()).thenReturn(courseAndStudentId);
 		studentService.removeStudentFromCourse();
 		verify(scannerUtil, times(2)).scanInt();
-		verify(jpaStudentDao).updateStudent(student);
+		verify(studentDao).save(student);
 		DBGeneratorService.students.clear();
 		DBGeneratorService.courses.clear();
 	}

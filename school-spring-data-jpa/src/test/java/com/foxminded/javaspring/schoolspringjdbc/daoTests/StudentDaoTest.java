@@ -16,21 +16,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.foxminded.javaspring.schoolspringjdbc.dao.JPAStudentDao;
+import com.foxminded.javaspring.schoolspringjdbc.dao.StudentDao;
 import com.foxminded.javaspring.schoolspringjdbc.model.Course;
 import com.foxminded.javaspring.schoolspringjdbc.model.Group;
 import com.foxminded.javaspring.schoolspringjdbc.model.Student;
 
 @SpringBootTest
-class JpaStudentDaoTest {
+class StudentDaoTest {
 
-	private JPAStudentDao jpaStudentDao;
+	private StudentDao studentDao;
 	@PersistenceContext
 	private EntityManager em;
 
 	@Autowired
-	public JpaStudentDaoTest(JPAStudentDao jpaStudentDao, EntityManager em) {
-		this.jpaStudentDao = jpaStudentDao;
+	public StudentDaoTest(StudentDao studentDao, EntityManager em) {
+		this.studentDao = studentDao;
 		this.em = em;
 	}
 
@@ -57,7 +57,7 @@ class JpaStudentDaoTest {
 	@Test
 	@Transactional
 	void testSaveStudent() {
-		jpaStudentDao.saveStudent(new Student("TestFName", "TestLName"));
+		studentDao.save(new Student("TestFName", "TestLName"));
 		Student student = (Student) em
 				.createNativeQuery("SELECT * FROM school.students WHERE first_name = ? AND last_name = ?;",
 						Student.class)
@@ -79,7 +79,7 @@ class JpaStudentDaoTest {
 						+ "first_name = 'DelStudentFName' AND last_name = 'DelStudentLName'", Student.class)
 				.getSingleResult();
 		assertNotNull(student);
-		jpaStudentDao.deleteStudentFromDB(student.getStudentID());
+		studentDao.deleteById(student.getStudentID());
 		assertThrows(NoResultException.class, () -> {
 			em.createNativeQuery("Select * from school.students WHERE first_name = ? AND " + "last_name = ?;",
 					Student.class).setParameter(1, delStudent.getFirstName()).setParameter(2, delStudent.getLastName())
@@ -99,7 +99,7 @@ class JpaStudentDaoTest {
 		group.setGroupName("tt-11");
 		em.persist(group);
 		updatingStudent.setGroupID(1);
-		jpaStudentDao.updateStudent(updatingStudent);
+		studentDao.save(updatingStudent);
 		Student student = (Student) em
 				.createNativeQuery("SELECT * from school.students WHERE "
 						+ "first_name = 'StudentFName' AND last_name = 'StudentLName'", Student.class)
@@ -119,7 +119,7 @@ class JpaStudentDaoTest {
 		em.persist(course);
 		student.addCourse(course);
 		em.merge(student);
-		List<Student> studentsRelatedToCourse = jpaStudentDao.findStudentsRelatedToCourse("TestCourse");
+		List<Student> studentsRelatedToCourse = studentDao.findStudentsRelatedToCourse("TestCourse");
 		assertEquals(1, studentsRelatedToCourse.size());
 		assertEquals("StudentFName", studentsRelatedToCourse.get(0).getFirstName());
 		assertEquals("StudentLName", studentsRelatedToCourse.get(0).getLastName());

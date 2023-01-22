@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.foxminded.javaspring.schoolspringjdbc.dao.JPATablesDao;
+import com.foxminded.javaspring.schoolspringjdbc.dao.TablesDao;
 import com.foxminded.javaspring.schoolspringjdbc.model.Course;
 import com.foxminded.javaspring.schoolspringjdbc.model.Group;
 import com.foxminded.javaspring.schoolspringjdbc.model.Student;
@@ -18,7 +18,7 @@ import com.foxminded.javaspring.schoolspringjdbc.utils.ScannerUtil;
 @Service
 public class DBGeneratorService {
 
-	private JPATablesDao jpaTablesDao;
+	private TablesDao jpaTablesDao;
 	private GroupGeneratorService groupGeneratorService;
 	private CourseService courseService;
 	private StudentGeneratorService studentGeneratorService;
@@ -34,7 +34,7 @@ public class DBGeneratorService {
 	public static List<Student> students = new ArrayList<>();
 
 	@Autowired
-	public DBGeneratorService(JPATablesDao jpaTablesDao, GroupGeneratorService groupGeneratorService,
+	public DBGeneratorService(TablesDao jpaTablesDao, GroupGeneratorService groupGeneratorService,
 			CourseService courseService, StudentGeneratorService studentGeneratorService,
 			CourseGeneratorService courseGeneratorService, GroupService groupService, StudentService studentService,
 			ScannerUtil scannerUtil) {
