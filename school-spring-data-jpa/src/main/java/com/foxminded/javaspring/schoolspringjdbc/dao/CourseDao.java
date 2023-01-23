@@ -8,4 +8,5 @@ import com.foxminded.javaspring.schoolspringjdbc.model.Course;
 @Repository
 public interface CourseDao extends JpaRepository<Course, Integer> {
 
+//	23.01.2023 18:56
 }
