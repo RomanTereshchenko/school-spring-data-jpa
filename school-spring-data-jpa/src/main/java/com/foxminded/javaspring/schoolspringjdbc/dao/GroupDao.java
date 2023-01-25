@@ -12,7 +12,7 @@ import com.foxminded.javaspring.schoolspringjdbc.model.Group;
 @Repository
 public interface GroupDao extends JpaRepository<Group, Integer> {
 
-	@Query(value = "SELECT g.group_id, g.group_name FROM school.groups g INNER JOIN school.students s "
+	@Query(value = "SELECT g.* FROM school.groups g INNER JOIN school.students s "
 			+ "ON g.group_id = s.group_id GROUP BY g.group_id HAVING COUNT (g.group_id)  <= :studentCount", nativeQuery = true)
 	public List<Group> findByStudentsCount(@Param("studentCount") Integer studentsCount);
 

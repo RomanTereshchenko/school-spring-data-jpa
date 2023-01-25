@@ -1,6 +1,7 @@
 package com.foxminded.javaspring.schoolspringjdbc.serviceTests;
 
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.Test;
@@ -40,16 +41,7 @@ class DBGeneratorServiceTest {
 	@Test
 	void testStartUp() {
 		
-		jpaTablesDao.truncateTables();
-		groupGeneratorService.generateNGroups(10);
-		groupService.addAllGroupsToDB();
-		courseGeneratorService.generateCourses();
-		courseService.addAllCoursesToDB();
-		studentGeneratorService.generateNStudents(20);
-		studentService.addStudentsToDB();
-		studentGeneratorService.assignAllGroupsToAllItsStudents();
-		studentService.updateAllStudentsInDB();
-		studentGeneratorService.assignCoursesToAllStudents();
+		dbGeneratorService.startUp();
 		verify(jpaTablesDao).truncateTables();
 		verify(groupGeneratorService).generateNGroups(anyInt());
 		verify(groupService).addAllGroupsToDB();
@@ -58,7 +50,7 @@ class DBGeneratorServiceTest {
 		verify(studentGeneratorService).generateNStudents(anyInt());
 		verify(studentService).addStudentsToDB();
 		verify(studentGeneratorService).assignAllGroupsToAllItsStudents();
-		verify(studentService).updateAllStudentsInDB();
+		verify(studentService, times(2)).updateAllStudentsInDB();
 		verify(studentGeneratorService).assignCoursesToAllStudents();
 	}
 	

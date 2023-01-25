@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.foxminded.javaspring.schoolspringjdbc.model.Course;
 
@@ -18,7 +17,6 @@ public class CourseGeneratorService {
 	public final List<String> courseNames = Arrays.asList("Mathematics", "Science", "Health", "Handwriting", "Art",
 			"Music", "Leadership", "Speech", "English", "Algebra");
 
-	@Transactional
 	public List<Course> generateCourses() {
 		List<Course> coursesLocal = new ArrayList<>();
 		for (int i = 1; i <= courseNames.size(); i++) {

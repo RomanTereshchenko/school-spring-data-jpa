@@ -33,11 +33,8 @@ public class Student {
 	private Integer studentID;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "group_id", insertable = false, updatable = false)
+	@JoinColumn(name = "group_id")
 	private Group group;
-
-	@Column(name = "group_id")
-	private Integer groupID;
 
 	@Column(name = "first_name")
 	private String firstName;
@@ -60,15 +57,13 @@ public class Student {
 		this.lastName = lastName;
 	}
 
-	public Student(int studentID, int groupID) {
+	public Student(int studentID) {
 		this.studentID = studentID;
-		this.groupID = groupID;
 	}
 	
 
-	public Student(Integer studentID, Integer groupID, String firstName, String lastName) {
+	public Student(Integer studentID, String firstName, String lastName) {
 		this.studentID = studentID;
-		this.groupID = groupID;
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}

@@ -1,6 +1,7 @@
 package com.foxminded.javaspring.schoolspringjdbc.serviceTests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
@@ -12,8 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.foxminded.javaspring.schoolspringjdbc.dao.GroupDao;
 import com.foxminded.javaspring.schoolspringjdbc.model.Group;
@@ -21,8 +20,6 @@ import com.foxminded.javaspring.schoolspringjdbc.service.GroupService;
 import com.foxminded.javaspring.schoolspringjdbc.utils.ScannerUtil;
 
 @ExtendWith(MockitoExtension.class)
-@Transactional
-@SpringBootTest
 class GroupServiceTest {
 
 	@Mock
@@ -39,10 +36,10 @@ class GroupServiceTest {
 		List<Group> testSelectedGroups = new ArrayList<>();
 		testSelectedGroups.add(new Group(1, "tt-11"));
 		Mockito.when(scannerUtil.scanInt()).thenReturn(20);
-		Mockito.when(groupDao.findByStudentsCount(20)).thenReturn(testSelectedGroups);
+		Mockito.when(groupDao.findByStudentsCount(anyInt())).thenReturn(testSelectedGroups);
 		List<Group> result = groupService.findGroupsByStudentsCount();
 		assertEquals("tt-11", result.get(0).getGroupName());
-//		verify(groupDao).findByStudentsCount(20);
+		verify(groupDao).findByStudentsCount(anyInt());
 		verify(scannerUtil).scanInt();
 	}
 

@@ -65,12 +65,12 @@ class GroupDaoTest {
 	void selectGroupsByStudentsCount_ReturnsGroupWithSelectedStudentCount() {
 		em.persist(new Group("tt-00"));
 		Student student1 = new Student();
-		student1.setGroupID(1);
+		student1.setGroup(new Group(1, "tt-00"));
 		student1.setFirstName("TestFName1");
 		student1.setLastName("TestLName1");
 		em.persist(student1);
 		Student student2 = new Student();
-		student2.setGroupID(1);
+		student2.setGroup(new Group(1, "tt-00"));
 		student2.setFirstName("TestFName2");
 		student2.setLastName("TestLName2");
 		em.persist(student2);

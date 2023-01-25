@@ -98,13 +98,13 @@ class StudentDaoTest {
 		Group group = new Group();
 		group.setGroupName("tt-11");
 		em.persist(group);
-		updatingStudent.setGroupID(1);
+		updatingStudent.setGroup(group);
 		studentDao.save(updatingStudent);
 		Student student = (Student) em
 				.createNativeQuery("SELECT * from school.students WHERE "
 						+ "first_name = 'StudentFName' AND last_name = 'StudentLName'", Student.class)
 				.getSingleResult();
-		assertEquals(1, student.getGroupID());
+		assertEquals(1, student.getGroup().getGroupID());
 	}
 
 	@Test

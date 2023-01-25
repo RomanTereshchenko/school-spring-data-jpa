@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.foxminded.javaspring.schoolspringjdbc.model.Course;
+import com.foxminded.javaspring.schoolspringjdbc.model.Group;
 import com.foxminded.javaspring.schoolspringjdbc.model.Student;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,11 +37,10 @@ public class StudentGeneratorService {
 		this.random = random;
 	}
 
-	@Transactional
 	public List<Student> generateNStudents(int countToGenerate) {
 		List<Student> studentsLocal = new ArrayList<>();
-		IntStream.rangeClosed(1, countToGenerate).forEach(
-				studentID -> studentsLocal.add(new Student(getRandomFirstName(), getRandomLastName())));
+		IntStream.rangeClosed(1, countToGenerate)
+				.forEach(studentID -> studentsLocal.add(new Student(getRandomFirstName(), getRandomLastName())));
 		log.info("Students generated");
 		return studentsLocal;
 	}
@@ -66,13 +66,13 @@ public class StudentGeneratorService {
 		int numberOfStudentsInGroup = 0;
 		while ((numberOfStudentsInGroup < limitOfStudentsInGroup)
 				&& (nextUnassignedStudentID < DBGeneratorService.students.size())) {
-			DBGeneratorService.students.get(nextUnassignedStudentID).setGroupID(groupID);
+			DBGeneratorService.students.get(nextUnassignedStudentID)
+					.setGroup(new Group(groupID, DBGeneratorService.groups.get(groupID).getGroupName()));
 			numberOfStudentsInGroup++;
 			nextUnassignedStudentID++;
 		}
 	}
 
-	@Transactional
 	public void assignCoursesToAllStudents() {
 		IntStream.rangeClosed(0, (DBGeneratorService.students.size() - 1)).forEach(this::assignCoursesToOneStudent);
 		log.info("Students assigned with lists of courses");

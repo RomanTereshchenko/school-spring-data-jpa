@@ -23,8 +23,9 @@ public class StudentService {
 	private StudentDao studentDao;
 
 	@Autowired
-	public StudentService(ScannerUtil scannerUtil) {
+	public StudentService(ScannerUtil scannerUtil, StudentDao studentDao) {
 		this.scannerUtil = scannerUtil;
+		this.studentDao = studentDao;
 	}
 
 	public void addStudentsToDB() {
@@ -34,7 +35,7 @@ public class StudentService {
 
 	public void updateAllStudentsInDB() {
 		for (Student student : DBGeneratorService.students) {
-			if (student.getGroupID() != 0) {
+			if (student.getGroup().getGroupID() != 0) {
 				studentDao.save(student);
 			}
 		}
@@ -94,7 +95,7 @@ public class StudentService {
 				return;
 			}
 		}
-		student.getCourses().add(DBGeneratorService.courses.get(courseId - 1));
+		student.addCourse(DBGeneratorService.courses.get(courseId - 1));
 		studentDao.save(student);
 		System.out.println(
 				"Course with ID " + courseId + " is assigned to student with ID " + studentId + " in School database");
@@ -108,15 +109,13 @@ public class StudentService {
 		Set<Course> studentCourses = student.getCourses();
 		System.out.println("This student is assigned to the following courses:");
 		for (Course studentCourse : studentCourses) {
-			System.out.println(studentCourse.getCourseID() + " - "
-					+ DBGeneratorService.courses.get(studentCourse.getCourseID() - 1).getCourseName());
+			System.out.println(studentCourse.getCourseID() + " - " + studentCourse.getCourseName());
 		}
 		System.out.println("Enter the course ID, from which to remove this student");
 		int courseIdToRemove = scannerUtil.scanInt();
 		for (Course studentCourse : studentCourses) {
 			if (studentCourse.getCourseID() == courseIdToRemove) {
-				student.getCourses()
-						.remove(DBGeneratorService.courses.get(courseIdToRemove - 1));
+				student.removeCourse(DBGeneratorService.courses.get(courseIdToRemove - 1));
 				studentDao.save(student);
 				System.out.println("Student with ID " + studentIdToRemove + " is removed from the course "
 						+ courseIdToRemove + " in School database");

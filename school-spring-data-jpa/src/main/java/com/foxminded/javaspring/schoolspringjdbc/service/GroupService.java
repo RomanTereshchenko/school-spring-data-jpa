@@ -21,8 +21,9 @@ public class GroupService {
 	private GroupDao groupDao;
 
 	@Autowired
-	public GroupService(ScannerUtil scannerUtil) {
+	public GroupService(ScannerUtil scannerUtil, GroupDao groupDao) {
 		this.scannerUtil = scannerUtil;
+		this.groupDao = groupDao;
 	}
 
 

@@ -24,11 +24,11 @@ public class DBGeneratorService {
 	private StudentGeneratorService studentGeneratorService;
 	private CourseGeneratorService courseGeneratorService;
 	private ScannerUtil scannerUtil;
+	private GroupService groupService;
+	private StudentService studentService;
 	private int groupsNumber = 10;
 	private int studentsNumber = 200;
 	private int menuOptionsNumber = 7;
-	private GroupService groupService;
-	private StudentService studentService;
 	public static List<Group> groups = new ArrayList<>();
 	public static List<Course> courses = new ArrayList<>();
 	public static List<Student> students = new ArrayList<>();

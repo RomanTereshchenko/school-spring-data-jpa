@@ -12,8 +12,7 @@ import com.foxminded.javaspring.schoolspringjdbc.model.Student;
 @Repository
 public interface StudentDao extends JpaRepository<Student, Integer> {
 
-	@Query(value = "SELECT s.student_id, s.first_name, s.last_name "
-			+ "FROM school.students s INNER JOIN school.students_courses sc ON s.student_id = sc.student_id "
+	@Query(value = "SELECT s.* FROM school.students s INNER JOIN school.students_courses sc ON s.student_id = sc.student_id "
 			+ "INNER JOIN school.courses c ON c.course_id = sc.course_id WHERE course_name = :courseName", nativeQuery = true)
 	public List<Student> findStudentsRelatedToCourse (@Param("courseName") String courseName);
 }
