@@ -67,7 +67,7 @@ public class StudentGeneratorService {
 		while ((numberOfStudentsInGroup < limitOfStudentsInGroup)
 				&& (nextUnassignedStudentID < DBGeneratorService.students.size())) {
 			DBGeneratorService.students.get(nextUnassignedStudentID)
-					.setGroup(new Group(groupID, DBGeneratorService.groups.get(groupID).getGroupName()));
+					.setGroup(new Group((groupID), DBGeneratorService.groups.get(groupID - 1).getGroupName()));
 			numberOfStudentsInGroup++;
 			nextUnassignedStudentID++;
 		}
